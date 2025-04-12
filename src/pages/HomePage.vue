@@ -1,13 +1,16 @@
 <template>
   <n-layout>
     <n-layout-content content-style="padding: 2rem;">
-      <n-input
-        v-model:value="searchQuery"
-        placeholder="Search books by title..."
-        clearable
-        size="large"
-        style="margin-bottom: 40px;"
-      />
+      <div class="search-header">
+  <h1 class="search-title">Find Your Next Read</h1>
+  <n-input
+    v-model:value="searchQuery"
+    placeholder="Search books by title..."
+    clearable
+    size="large"
+    class="custom-search"
+  />
+</div>
       
       <div v-if="filteredBooks.length === 0" class="no-books-message">
         No books found.
@@ -138,4 +141,25 @@ console.log('data',data)
   color: #555;
   padding: 2rem;
 }
+
+.search-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  background: linear-gradient(90deg, #6c63ff, #a367dc);
+  padding: 2rem 1rem;
+  border-radius: 10px;
+  color: white;
+}
+
+.search-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.custom-search {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
 </style>

@@ -1,6 +1,13 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRouter } from 'vue-router'
+const showHeader = ref(false)
+
+onMounted(() => {
+  checkWidth()
+  window.addEventListener('resize', checkWidth)
+  showHeader.value = true
+})
 
 const isDrawerOpen = ref(false)
 const isMobile = ref(false)
@@ -39,24 +46,21 @@ watch(isMobile, (val) => {
 
 <template>
   <div id="app">
-    <header class="site-header">
-      <h1 class="logo">Book Reviews</h1>
-
-
-      <nav v-if="!isMobile" class="desktop-menu">
-        <RouterLink to="/" class="nav-link">Home</RouterLink>
-        <RouterLink to="/about" class="nav-link">About</RouterLink>
-        <RouterLink to="/contact" class="nav-link">Contact</RouterLink>
-      </nav>
-
-
-      <div class="hamburger" v-if="isMobile" @click="isDrawerOpen = true">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-      </div>
-    </header>
-
+    <transition name="slide-down">
+      <header v-if="showHeader" class="site-header">
+        <nav v-if="!isMobile" class="desktop-menu">
+          <RouterLink to="/" class="nav-link">Home</RouterLink>
+          <RouterLink to="/about" class="nav-link">About</RouterLink>
+          <RouterLink to="/contact" class="nav-link">Contact</RouterLink>
+        </nav>
+        <div class="hamburger" v-if="isMobile" @click="isDrawerOpen = true">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+        <h1 class="logo">Book Reviews</h1>
+      </header>
+    </transition>
     <n-drawer
       v-if="isMobile"
       v-model:show="isDrawerOpen"
@@ -71,7 +75,20 @@ watch(isMobile, (val) => {
     </main>
 
     <footer class="site-footer">
-      <p>© 2025 Book Reviews. All rights reserved.</p>
+      <div class="footer-content">
+        <div class="footer-left">
+          <h2>Book Reviews</h2>
+        </div>
+        <div class="footer-center">
+          <p>Thanks for visiting. Dive into the world of stories with us.</p>
+        </div>
+        <div class="footer-right">
+          <RouterLink to="/" class="footer-link">Home</RouterLink>
+          <RouterLink to="/about" class="footer-link">About</RouterLink>
+          <RouterLink to="/contact" class="footer-link">Contact</RouterLink>
+        </div>
+      </div>
+      <p class="footer-bottom">© 2025 Book Reviews. All rights reserved.</p>
     </footer>
   </div>
 </template>
@@ -149,12 +166,89 @@ main {
 }
 
 .site-footer {
-  text-align: center;
-  padding: 1rem;
   background: linear-gradient(90deg, #6c63ff, #a367dc);
   color: white;
+  padding: 1.5rem;
+  margin: 1rem;
   border-radius: 8px;
   font-size: 0.9rem;
-  margin: 1rem;
 }
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.footer-left h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.footer-center p {
+  margin: 0;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+.footer-right {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-link {
+  color: white;
+  font-size: 1.5rem;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.social-link:hover {
+  transform: scale(1.2);
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.footer-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: black;
+}
+.slide-down-enter-active {
+  transition: all 0.6s ease-out;
+}
+.slide-down-enter-from {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+.slide-down-enter-to {
+  transform: translateY(0);
+  opacity: 1;
+}
+@keyframes slideFromTop {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 </style>
